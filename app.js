@@ -11,7 +11,7 @@ app.use(express.json())
 
 
 //routes
-app.use(userRouter)
+app.use('/users',userRouter)
 
 //ErrorHandler
 app.use(errorHandler)
