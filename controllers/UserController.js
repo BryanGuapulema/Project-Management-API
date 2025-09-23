@@ -4,6 +4,7 @@ import { validatePartialSchema, validateSchema } from '../utils/validateSchema.j
 import { userSchema } from '../validations/userSchema.js'
 import { successResponse } from '../utils/response.js'
 import bcrypt from 'bcrypt'
+import { SALT_ROUNDS } from '../config/config.js'
 
 export class UserController{
     static async getAllUsers(req,res){
@@ -25,7 +26,7 @@ export class UserController{
         }
 
         const {password} = result.data
-        const passwordHashed = await bcrypt.hash(password,10)
+        const passwordHashed = await bcrypt.hash(password,SALT_ROUNDS)
 
         const newUser = await UserServices.createUser({...result.data, password: passwordHashed})
         successResponse(res,newUser,201)
