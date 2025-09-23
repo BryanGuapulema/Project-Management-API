@@ -11,7 +11,7 @@ export class UserModel{
         return await User.create(data)
     }
     static async updateUser(id, data){
-        return await User.findByIdAndDelete(id, data, {new: true})
+        return await User.findByIdAndUpdate(id, data, {new: true})
     }
     static async deleteUser(id){
         return await User.findByIdAndDelete(id)
