@@ -99,4 +99,43 @@ export class AuthController{
 
       successResponse(res, { message: 'Log out successfully' })
     }
+
+    static async refresh (req, res) {
+        const refresh_token = req.cookies.refresh_token
+        if (!refresh_token) {
+            throw new AppError('No refresh token provided',401)
+        }
+
+        if (!refreshToken) throw new AppError('Refresh token no encontrado', 401)
+
+        let payload
+        try {
+            payload = jwt.verify(refreshToken, config.JWT_REFRESH_SECRET)
+        } catch (err) {
+            throw new AppError('Refresh token inválido', 401)
+        }
+
+        const user = await UserServices.getUserById(payload.id)
+        if (!user) throw new AppError('Usuario no encontrado', 401)
+
+        successResponse(res, {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        }, 200, {
+            access_token: newAccessToken,
+            accessCookieOptions: {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 1000 * 60 * 60 * 24, // 15 min
+            },   
+        })                    
+      }
+    
+      static async me (req, res) {
+        const { user } = req.session
+        successResponse(res,user)
+      }
 }
