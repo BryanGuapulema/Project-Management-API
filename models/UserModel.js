@@ -1,4 +1,3 @@
-import mongoose from "mongoose"
 import { User } from "../schemas/userSchema.js"
 
 export class UserModel{
