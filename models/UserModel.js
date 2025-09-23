@@ -1,19 +1,27 @@
-import { User } from "../schemas/userSchema.js"
+import { Schema, model} from "mongoose"
 
-export class UserModel{
-    static async getAllUsers(){
-        return await User.find()
+const UserSchema = new Schema({
+    name: {
+        type: String,
+        require: true,
+        unique: true
+    },
+    email:{
+        type: String,
+        require: true,
+        unique: true
+    },
+    password:{
+        type: String,
+        require: true
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'user'],
+        default: 'user'
     }
-    static async getUserById(id){
-        return await User.findById(id)
-    }
-    static async createUser(data){
-        return await User.create(data)
-    }
-    static async updateUser(id, data){
-        return await User.findByIdAndUpdate(id, data, {new: true})
-    }
-    static async deleteUser(id){
-        return await User.findByIdAndDelete(id)
-    }
-}
+},{
+    timestamps: true
+})
+
+export const User = model('User', UserSchema)
