@@ -2,6 +2,7 @@ import { UserModel } from '../models/UserModel.js'
 import {AppError} from '../utils/appError.js'
 import { validatePartialSchema, validateSchema } from '../utils/validateSchema.js'
 import { userSchema } from '../validations/userValidations.js'
+import bcrypt from 'bcrypt'
 
 export class UserController{
     static async getAllUsers(req,res){
@@ -21,7 +22,11 @@ export class UserController{
         if(!result.success) {
             throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message),400)
         }
-        const newUser = await UserModel.createUser(result.data)
+
+        const {password} = result.data
+        const passwordHashed = await bcrypt.hash(password,10)
+
+        const newUser = await UserModel.createUser({...result.data, password: passwordHashed})
         res.status(201).json(newUser)
 
     }
