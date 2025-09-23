@@ -6,5 +6,5 @@ export const authRouter = Router()
 
 authRouter.post('/register',catchAsync(AuthController.register))
 authRouter.post('/login',catchAsync(AuthController.login))
-// authRouter.post('/logout',catchAsync(AuthController.createUser))
-// authRouter.get('/:id',catchAsync(AuthController.getUserById))
+authRouter.post('/logout',catchAsync(AuthController.logout))
+authRouter.post('/refresh',catchAsync(AuthController.refresh))
