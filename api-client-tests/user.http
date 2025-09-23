@@ -1,0 +1,26 @@
+###GET ALL USERS
+GET http://localhost:4000/users
+
+###CREATE NEW USER
+POST http://localhost:4000/users
+Content-Type: application/json
+
+{
+    "name": "Usuario1",
+    "email": "usuario1@email.com",
+    "password": "123456"
+}
+
+###GET USER BY ID
+GET http://localhost:4000/users/68d230ebf5fea07e5dbfa71b
+
+###UPDATE USER
+PUT http://localhost:4000/users/68d230ebf5fea07e5dbfa71b
+Content-Type: application/json
+
+{
+    "name": "Usuario1Mod"
+}
+
+###DELETE USER 
+DELETE http://localhost:4000/users/68d230ebf5fea07e5dbfa71b
