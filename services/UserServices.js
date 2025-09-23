@@ -16,4 +16,13 @@ export class UserServices{
     static async deleteUser(id){
         return await User.findByIdAndDelete(id)
     }
+
+    static async getUserByUsernameOrEmail(string){
+        const user = User.findOne({name: string})
+        if(user){
+            return await user
+        }else{
+            return await User.findOne({email: string})
+        }
+    }
 }
