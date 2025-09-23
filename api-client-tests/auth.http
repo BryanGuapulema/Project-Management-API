@@ -7,3 +7,21 @@ Content-Type: application/json
     "email": "usuario3@email.com",
     "password": "contraseña"
 }
+
+###LOGIN
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "name": "Usuario2 desde register",
+    "password": "contraseña"
+}
+
+###LOGOUT
+POST http://localhost:4000/logout
+
+###REFRESH
+POST http://localhost:4000/refresh
+
+###VERIFY IF USER IS LOGGED
+GET http://localhost:4000/me

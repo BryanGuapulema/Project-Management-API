@@ -8,3 +8,4 @@ authRouter.post('/register',catchAsync(AuthController.register))
 authRouter.post('/login',catchAsync(AuthController.login))
 authRouter.post('/logout',catchAsync(AuthController.logout))
 authRouter.post('/refresh',catchAsync(AuthController.refresh))
+//authRouter.get('/refresh',catchAsync(AuthController.me)) check for errors
