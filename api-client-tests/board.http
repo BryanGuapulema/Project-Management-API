@@ -1,0 +1,2 @@
+###GET ALL BOARDS FOR A USER
+GET http://localhost:4000/boards
