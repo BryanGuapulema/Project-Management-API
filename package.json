@@ -10,20 +10,21 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "standard": "^17.1.2"
-  },
-  "eslintConfig": {
-    "extends": "standard"
-  },
+  "description": "",  
   "dependencies": {
     "bcrypt": "6.0.0",
+    "cookie-parser": "1.4.7",
     "cors": "2.8.5",
     "dotenv": "17.2.2",
     "express": "5.1.0",
     "jsonwebtoken": "9.0.2",
     "mongoose": "8.18.2",
     "zod": "4.1.11"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  },
+  "eslintConfig": {
+    "extends": "standard"
   }
 }

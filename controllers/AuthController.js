@@ -48,6 +48,8 @@ export class AuthController{
         //jwt access-token creation
         const access_token= jwt.sign({
             id: user._id,
+            username: user.name,
+            role: user.role
         },
         JWT_SECRET,
         {
@@ -135,7 +137,8 @@ export class AuthController{
       }
     
       static async me (req, res) {
-        const { user } = req.session
-        successResponse(res,user)
+        const user = req.user
+        if (user) return successResponse(res,user)
+        throw new AppError('Not logged yet',400)
       }
 }
