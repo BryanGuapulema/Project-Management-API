@@ -24,4 +24,4 @@ POST http://localhost:4000/logout
 POST http://localhost:4000/refresh
 
 ###VERIFY IF USER IS LOGGED
-GET http://localhost:4000/me
+GET http://localhost:4000/auth/me
