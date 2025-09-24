@@ -1,6 +1,10 @@
 ###GET ALL BOARDS (RESULT DEPENDS ON ROLE)
 GET http://localhost:4000/boards
 
+###GET ALL BOARDS (RESULT DEPENDS ON ROLE)
+###BY STATUS
+GET http://localhost:4000/boards?status=hold
+
 ###CREATE NEW BOARD BY CURRENT USER
 POST http://localhost:4000/boards
 Content-Type: application/json

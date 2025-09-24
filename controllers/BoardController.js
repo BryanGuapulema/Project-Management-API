@@ -6,13 +6,21 @@ import { boardSchema } from "../validations/boardSchema.js"
 
 
 export class BoardController{
-    //Get all boards of a user
     static async getAllBoards(req,res){
+        const {status} = req.query        
         let boards = null
+
         if (req.user.role === 'user'){
-             boards= await BoardServices.getAllUserBoards(req.user.id)             
+            //Get all boards of current user
+            boards= await BoardServices.getAllUserBoards(req.user.id)             
         }else{
+            //Get all boards
             boards= await BoardServices.getAllBoards()
+        }
+        
+        //filter by status
+        if (status){
+            boards = boards.filter(board => board.status === status)
         }
 
         return successResponse(res, boards)
