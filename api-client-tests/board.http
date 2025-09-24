@@ -14,11 +14,17 @@ Content-Type: application/json
     "description": "Board 3 User 2"
 }
 
+
+
+
 ###GET BOARD BY ID (DEPENDS ON ROLE)
 GET http://localhost:4000/boards/68d440f0da39abbc3593a948
 
 ###GET BOARD BY ID (DEPENDS ON ROLE)
 GET http://localhost:4000/boards/68d4327456c142a741735bf7
+
+
+
 
 ###UPDATE BOARD (USER IS ADMIN OR BOARD OWNER)
 PUT http://localhost:4000/boards/68d440f0da39abbc3593a948
@@ -35,3 +41,11 @@ Content-Type: application/json
 {
     "description": "Board 3 User 2 modified"
 }
+
+
+###DELETE BOARD (USER IS ADMIN OR BOARD OWNER)
+DELETE http://localhost:4000/boards/68d440f0da39abbc3593a948
+
+
+###DELETE BOARD (USER IS NOT ADMIN OR BOARD OWNER)
+DELETE  http://localhost:4000/boards/68d4327456c142a741735bf7

@@ -25,4 +25,9 @@ export class BoardServices {
     static async updateBoard(id,data){
         return await Board.findByIdAndUpdate(id, data, {new: true})
     }
+
+    //delete board
+    static async deleteBoard(id){
+        return await Board.findByIdAndDelete(id)
+    }
 }

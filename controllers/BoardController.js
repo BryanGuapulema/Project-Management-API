@@ -87,4 +87,21 @@ export class BoardController{
         return successResponse(res, boardUpdated)
         
     }
+
+    //delete board
+    static async deleteBoard(req, res){
+        const {id} = req.params                
+        if(!isValidObjectId(id)) throw new AppError('Invalid board id format',400)
+        
+        const board = await BoardServices.getBoardById(id)
+        if (!board) throw new AppError('Board not found', 404)
+        
+        if(req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id ){            
+            throw new AppError('You are not the owner of this board',403)            
+        }
+
+        const boardDeleted= await BoardServices.deleteBoard(id)
+
+        return successResponse(res, boardDeleted)
+    }
 }
