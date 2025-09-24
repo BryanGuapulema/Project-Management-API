@@ -8,7 +8,7 @@ Content-Type: application/json
     "password": "contraseña"
 }
 
-###LOGIN
+###LOGIN (USER)
 POST http://localhost:4000/login
 Content-Type: application/json
 
@@ -16,6 +16,26 @@ Content-Type: application/json
     "name": "Usuario2 desde register",
     "password": "contraseña"
 }
+
+###LOGIN (USER2)
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "name": "Usuario desde register",
+    "password": "contraseña"
+}
+
+###LOGIN (ADMIN)
+POST http://localhost:4000/login
+Content-Type: application/json
+
+{
+    "name": "admin",
+    "password": "123456"
+}
+
+
 
 ###LOGOUT
 POST http://localhost:4000/logout

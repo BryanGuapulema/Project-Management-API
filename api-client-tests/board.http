@@ -1,4 +1,4 @@
-###GET ALL BOARDS FOR A USER
+###GET ALL BOARDS (RESULT DEPENDS ON ROLE)
 GET http://localhost:4000/boards
 
 ###CREATE NEW BOARD BY CURRENT USER
@@ -6,7 +6,7 @@ POST http://localhost:4000/boards
 Content-Type: application/json
 
 {
-    "name": "Board 1",
-    "description": "Board 1",
+    "name": "Board 2",
+    "description": "Board 2 User 2",
     "status": "hold"
 }

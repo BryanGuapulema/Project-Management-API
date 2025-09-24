@@ -2,8 +2,13 @@ import { Board } from "../models/BoardModel.js";
 
 export class BoardServices {
     //Get all boards of a user
-    static async getAllBoards(ownerId){
+    static async getAllUserBoards(ownerId){
         return await Board.find({ownerId}).sort({ createdAt: -1 })
+    }
+    
+    //get all Boards
+    static async getAllBoards(){
+        return await Board.find().sort({ createdAt: -1 })
     }
 
     //create a board by logged user
