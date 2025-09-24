@@ -20,4 +20,9 @@ export class BoardServices {
     static async getBoardById(id){
         return await Board.findById(id)
     }
+
+    //update board
+    static async updateBoard(id,data){
+        return await Board.findByIdAndUpdate(id, data, {new: true})
+    }
 }

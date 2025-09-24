@@ -31,24 +31,23 @@ export class BoardController{
 
     //create a board by logged user
     static async createBoard(req,res){
+        const result = validateSchema(boardSchema,req.body)
         
-        const data = {
-            ...req.body,
-            ownerId: req.user.id
-        }
-        const result = validateSchema(boardSchema,data)
         if(!result.success) {
             throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message),400)
         }        
-
-        const newBoard= await BoardServices.createBoard(result.data)
+        
+        const data = {
+            ...result.data,
+            ownerId: req.user.id
+        }
+        const newBoard= await BoardServices.createBoard(data)
         return successResponse(res, newBoard,201)
     } 
 
     //get board by id
     static async getBoardById(req,res){
-        const {id} = req.params        
-        
+        const {id} = req.params                
         if(!isValidObjectId(id)) throw new AppError('Invalid board id format',400)
             
         const board = await BoardServices.getBoardById(id)
@@ -62,5 +61,30 @@ export class BoardController{
 
 
         return successResponse(res,board)
+    }
+
+    //update board
+    static async updateBoard(req,res){
+        const {id} = req.params                
+        if(!isValidObjectId(id)) throw new AppError('Invalid board id format',400)
+
+        const result = validatePartialSchema(boardSchema,req.body)
+        
+        if(!result.success) {
+            throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message),400)
+        }    
+        
+        const board = await BoardServices.getBoardById(id)
+        if (!board) throw new AppError('Board not found', 404)
+
+
+        if(req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id ){            
+            throw new AppError('You are not the owner of this board',403)            
+        }
+                
+        const boardUpdated= await BoardServices.updateBoard(id,result.data)
+
+        return successResponse(res, boardUpdated)
+        
     }
 }
