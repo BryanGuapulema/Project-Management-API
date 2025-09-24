@@ -5,3 +5,4 @@ export const BoardRouter = Router()
 
 BoardRouter.get('/',BoardController.getAllBoards)
 BoardRouter.post('/',BoardController.createBoard)
+BoardRouter.get('/:id',BoardController.getBoardById)

@@ -15,4 +15,9 @@ export class BoardServices {
     static async createBoard(data){        
         return await Board.create(data)
     }
+
+    //get board by id
+    static async getBoardById(id){
+        return await Board.findById(id)
+    }
 }

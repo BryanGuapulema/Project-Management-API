@@ -10,7 +10,8 @@ const BoardSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'completed', 'hold']
+        enum: ['active', 'completed', 'hold'],
+        default: 'active'
     },
     ownerId: {
         type: Schema.Types.ObjectId,

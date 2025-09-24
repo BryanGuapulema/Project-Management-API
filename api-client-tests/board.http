@@ -10,7 +10,12 @@ POST http://localhost:4000/boards
 Content-Type: application/json
 
 {
-    "name": "Board 2",
-    "description": "Board 2 User 2",
-    "status": "hold"
+    "name": "Board 3",
+    "description": "Board 3 User 2"
 }
+
+###GET BOARD BY ID (DEPENDS ON ROLE)
+GET http://localhost:4000/boards/68d440f0da39abbc3593a948
+
+###GET BOARD BY ID (DEPENDS ON ROLE)
+GET http://localhost:4000/boards/68d4327456c142a741735bf7
