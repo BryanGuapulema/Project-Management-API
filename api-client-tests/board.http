@@ -5,6 +5,8 @@ GET http://localhost:4000/boards
 ###BY STATUS
 GET http://localhost:4000/boards?status=hold
 
+
+
 ###CREATE NEW BOARD BY CURRENT USER
 POST http://localhost:4000/boards
 Content-Type: application/json
