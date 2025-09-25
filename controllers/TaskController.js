@@ -3,7 +3,7 @@ import { TaskServices } from "../services/TaskServices.js"
 import {ListServices} from"../services/ListServices.js"
 import {UserServices} from "../services/UserServices.js"
 import { TaskSchema } from "../validations/TaskSchema.js"
-import {validateSchema} from "../utils/validateSchema.js"
+import {validatePartialSchema, validateSchema} from "../utils/validateSchema.js"
 import {AppError} from "../utils/appError.js"
 import { successResponse } from "../utils/response.js"
 import { isValidObjectId } from "mongoose"
@@ -102,6 +102,48 @@ export class TaskController{
         }
 
         return successResponse(res,task)        
+    }
 
+    static async updateTask(req,res){
+
+        //validate task id is valid
+        const {id} = req.params
+        if(!isValidObjectId(id)) throw new AppError('Invalid task id',400)
+
+        ////look for task
+        const task = await TaskServices.getTaskById(id)
+        if(!task) throw new AppError('Task not found',404)
+
+        //data validation
+        const result = validatePartialSchema(TaskSchema,req.body)
+        
+        if (!result.success) {
+            throw new AppError(
+                result.error.errors.map(err => `${err.path.join(".")}: ${err.message}`).join(", "),
+                400
+            )
+        }
+        
+        const list = await ListServices.getListById(task.listId)
+        let {assignedTo}= result.data
+            
+        //Validate assignedTo userId if sent
+        if(assignedTo){
+            if(! await UserServices.getUserById(assignedTo)) throw new AppError('User not found',404)
+        }else{
+            assignedTo = task.assignedTo
+        }
+
+        ////Validate user role: User can only update tasks in own lists
+        if(req.user.role === 'user'){
+            //Get all boards of current user
+            const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+            //validates if is user board 
+            if(!boardsIds.includes(list.boardId.toString())) throw new AppError('Forbidden',403)                
+        }
+
+        //update task
+        const updatedTask = await TaskServices.updateTask(id,{ ...result.data,assignedTo})
+        return successResponse(res, updatedTask)                
     }
 }
