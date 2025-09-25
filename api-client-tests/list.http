@@ -1,0 +1,60 @@
+###GET ALL LISTS (RESULT DEPENDS ON ROLE)
+GET http://localhost:4000/lists
+
+
+
+###CREATE NEW LIST IN CURRENT USER BOARD
+POST http://localhost:4000/lists
+Content-Type: application/json
+
+{
+    "title": "List 1 Board 1 User 1",    
+    "boardId": "68d432aa56c142a741735bfc",
+    "position": 1
+}
+
+###CREATE NEW LIST IN CURRENT USER BOARD
+POST http://localhost:4000/lists
+Content-Type: application/json
+
+{
+    "title": "List 2 Board 1 User 1",    
+    "boardId": "68d432aa56c142a741735bfc",
+    "position": 1
+}
+
+
+###CREATE NEW BOARD IN ANOTHER USER BOARD
+POST http://localhost:4000/lists
+Content-Type: application/json
+
+{
+    "title": "List 1 Board 1 User 2",    
+    "boardId": "68d4393213b73425cb3887ef",
+    "position": 1
+}
+
+###GET LIST BY ID (DEPENDS ON ROLE)
+GET http://localhost:4000/lists/68d4939b65ffa39ef04f5fa8
+
+###GET LIST BY ID (DEPENDS ON ROLE)
+GET http://localhost:4000/lists/68d4949965ffa39ef04f5fbe
+
+
+
+
+###UPDATE LIST (USER IS ADMIN OR BOARD OWNER)
+PUT http://localhost:4000/lists/68d4939b65ffa39ef04f5fa8
+Content-Type: application/json
+
+{
+    "position": 2
+}
+
+###UPDATE LIST (USER IS NOT ADMIN OR BOARD OWNER)
+PUT http://localhost:4000/lists/68d4949965ffa39ef04f5fbe
+Content-Type: application/json
+
+{
+    "position": 2
+}

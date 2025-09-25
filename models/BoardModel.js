@@ -3,7 +3,7 @@ import { Schema, model} from "mongoose"
 const BoardSchema = new Schema({
     name: {
         type: String,
-        require: true
+        required: true
     },
     description:{
         type: String
@@ -16,7 +16,7 @@ const BoardSchema = new Schema({
     ownerId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        require: true
+        required: true
     }
 },{
     timestamps: true

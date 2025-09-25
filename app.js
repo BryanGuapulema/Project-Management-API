@@ -8,6 +8,7 @@ import { authMiddleware } from './middlewares/authMiddleware.js'
 import { AuthController } from './controllers/AuthController.js'
 import { catchAsync } from './utils/catchAsync.js'
 import { BoardRouter } from './routes/BoardRoutes.js'
+import { ListRouter } from './routes/ListRoutes.js'
 
 export const app = express()
 
@@ -24,6 +25,7 @@ app.get('/auth/me',catchAsync(AuthController.me))
 //routes
 app.use('/users',userRouter)
 app.use('/boards',BoardRouter)
+app.use('/lists',ListRouter)
 
 //ErrorHandler
 app.use(errorHandler)
