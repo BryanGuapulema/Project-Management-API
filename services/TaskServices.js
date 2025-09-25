@@ -13,5 +13,7 @@ export class TaskServices{
         return await Task.find({listId})
     }
 
-    
+    static async getTaskById(id){
+        return await Task.findById(id)
+    }
 }

@@ -77,5 +77,31 @@ export class TaskController{
 
     }
 
-   
+    static async getTaskById(req,res){
+        //validate task id is valid
+        const {id} = req.params
+        if(!isValidObjectId(id)) throw new AppError('Invalid task id',400)
+
+        ////look for task
+        const task = await TaskServices.getTaskById(id)
+        if(!task) throw new AppError('Task not found',404)
+        
+        //Validate user role
+        if(req.user.role === 'user'){
+            //Get all boards of current user
+            const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+
+            // Get all board lists ids and flatten them
+            const listsArrays = await Promise.all(
+                boardsIds.map(boardId => ListServices.getAllListsOfBoard(boardId))
+            )            
+            const listIds = listsArrays.flat().map(list => list._id.toString())            
+
+            //validates is user board 
+            if(!listIds.includes(task.listId.toString())) throw new AppError('Forbidden',403)
+        }
+
+        return successResponse(res,task)        
+
+    }
 }

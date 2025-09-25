@@ -5,6 +5,6 @@ export const TaskRouter = Router()
 
 TaskRouter.post('/',TaskController.createTask)
 TaskRouter.get('/', TaskController.getAllTasks)
-// TaskRouter.get('/:id',TaskController.getListById)
+TaskRouter.get('/:id',TaskController.getTaskById)
 // TaskRouter.put('/:id',TaskController.updateList)
 // TaskRouter.delete('/:id',TaskController.deleteList)
