@@ -12,4 +12,6 @@ export class TaskServices{
     static async getAllTasksofList(listId){
         return await Task.find({listId})
     }
+
+    
 }

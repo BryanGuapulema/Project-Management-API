@@ -6,6 +6,7 @@ import { TaskSchema } from "../validations/TaskSchema.js"
 import {validateSchema} from "../utils/validateSchema.js"
 import {AppError} from "../utils/appError.js"
 import { successResponse } from "../utils/response.js"
+import { isValidObjectId } from "mongoose"
 
 export class TaskController{
     static async createTask(req,res){        
@@ -48,4 +49,33 @@ export class TaskController{
 
 
     }
+
+    static async getAllTasks(req,res){
+        let tasks = []
+        if (req.user.role === 'user'){
+            //Get all boards of current user
+            const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+            
+            // Get all board lists ids and flatten them
+            const listsArrays = await Promise.all(
+                boardsIds.map(boardId => ListServices.getAllListsOfBoard(boardId))
+            )
+            
+            const listIds = listsArrays.flat().map(list => list._id)
+            
+            // Get all list tasks and flatten them
+            const tasksArrays = await Promise.all(
+                listIds.map(listId => TaskServices.getAllTasksofList(listId))
+            )
+            
+            tasks = tasksArrays.flat()
+        }else{            
+            tasks = await TaskServices.getAllTasks()
+        }
+
+        return successResponse(res, tasks)
+
+    }
+
+   
 }

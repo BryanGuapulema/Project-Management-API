@@ -1,6 +1,5 @@
-
-
-
+###GET ALL TASKS (RESULT DEPENDS ON ROLE)
+GET http://localhost:4000/tasks
 
 
 ###CREATE NEW TASK IN CURRENT USER LIST
@@ -36,4 +35,28 @@ Content-Type: application/json
     "description": "Task test",
     "listId": "68d4949965ffa39ef04f5fbe",
     "dueDate": "2025-10-15T23:59:59.000Z"
+}
+
+
+
+
+
+
+
+###UPDATE TASK IN CURRENT USER LIST
+POST http://localhost:4000/tasks/68d59cd6f0ea5ea5c07a4ba9
+Content-Type: application/json
+
+
+{
+    "title": "Task 3 List 2 Board 2 User 1",
+}
+
+###UPDATE TASK IN ANOTHER USER LIST
+POST http://localhost:4000/tasks/68d5bb122d9fad87a644c705
+Content-Type: application/json
+
+
+{
+    "title": "Task 1 List 1 Board 1 User 2",
 }
