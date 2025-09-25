@@ -55,7 +55,7 @@ export class BoardController{
 
         if(req.user.role === 'user'){
             if(board.ownerId.toString() !== req.user.id) {
-                throw new AppError('You are not the owner of this board',403)
+                throw new AppError('Forbidden',403)
             }
         }
 
@@ -79,7 +79,7 @@ export class BoardController{
 
 
         if(req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id ){            
-            throw new AppError('You are not the owner of this board',403)            
+            throw new AppError('Forbidden',403)            
         }
                 
         const boardUpdated= await BoardServices.updateBoard(id,result.data)
@@ -97,11 +97,11 @@ export class BoardController{
         if (!board) throw new AppError('Board not found', 404)
         
         if(req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id ){            
-            throw new AppError('You are not the owner of this board',403)            
+            throw new AppError('Forbidden',403)            
         }
 
-        const boardDeleted= await BoardServices.deleteBoard(id)
+        await BoardServices.deleteBoard(id)
 
-        return successResponse(res, boardDeleted)
+        return successResponse(res, {message: "Board deleted successfully"})
     }
 }
