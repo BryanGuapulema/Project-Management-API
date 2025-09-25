@@ -26,14 +26,14 @@ const TaskSchema = new Schema(
       type: Date,
     },
     listId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "List",
       required: true,
     },
     assignedTo: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
-    },
+    }
   },
   { 
     timestamps: true

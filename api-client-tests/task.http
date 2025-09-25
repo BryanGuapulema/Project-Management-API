@@ -1,0 +1,39 @@
+
+
+
+
+
+###CREATE NEW TASK IN CURRENT USER LIST
+POST http://localhost:4000/tasks
+Content-Type: application/json
+
+{
+    "title": "Task 1 List 2 Board 2 User 1",
+    "description": "Task test",
+    "listId": "68d4939e65ffa39ef04f5fac",
+    "dueDate": "2025-10-15T23:59:59.000Z"
+}
+
+###CREATE NEW TASK IN CURRENT USER LIST
+POST http://localhost:4000/tasks
+Content-Type: application/json
+
+
+{
+    "title": "Task 2 List 2 Board 2 User 1",
+    "description": "Task test",
+    "listId": "68d4939e65ffa39ef04f5fac",
+    "dueDate": "2025-10-15T23:59:59.000Z"
+}
+
+###CREATE NEW TASK IN ANOTHER USER LIST
+POST http://localhost:4000/tasks
+Content-Type: application/json
+
+
+{
+    "title": "Task 2 List 2 Board 2 User 1",
+    "description": "Task test",
+    "listId": "68d4949965ffa39ef04f5fbe",
+    "dueDate": "2025-10-15T23:59:59.000Z"
+}
