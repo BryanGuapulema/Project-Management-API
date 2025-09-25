@@ -9,6 +9,7 @@ import { AuthController } from './controllers/AuthController.js'
 import { catchAsync } from './utils/catchAsync.js'
 import { BoardRouter } from './routes/BoardRoutes.js'
 import { ListRouter } from './routes/ListRoutes.js'
+import { TaskRouter } from './routes/TaskRoutes.js'
 
 export const app = express()
 
@@ -26,6 +27,7 @@ app.get('/auth/me',catchAsync(AuthController.me))
 app.use('/users',userRouter)
 app.use('/boards',BoardRouter)
 app.use('/lists',ListRouter)
+app.use('/tasks',TaskRouter)
 
 //ErrorHandler
 app.use(errorHandler)

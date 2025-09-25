@@ -4,6 +4,8 @@ import { AppError } from "../utils/appError.js"
 import { successResponse } from "../utils/response.js"
 import { validatePartialSchema, validateSchema } from '../utils/validateSchema.js'
 import { boardSchema } from "../validations/boardSchema.js"
+import { ListController } from "./ListController.js"
+import { ListServices } from "../services/ListServices.js"
 
 
 export class BoardController{
@@ -103,5 +105,27 @@ export class BoardController{
         await BoardServices.deleteBoard(id)
 
         return successResponse(res, {message: "Board deleted successfully"})
+    }
+
+    //get all list related to a board
+    static async getListsByBoardId(req, res) {
+        const { id: boardId } = req.params
+
+        //validate board id is valid
+        if (!isValidObjectId(boardId)) throw new AppError('Invalid board id', 400)
+
+        //validate board exists
+        const board = await BoardServices.getBoardById(boardId)
+        if (!board) throw new AppError('Board not found', 404)
+
+        //Validate user role: User can only access lists from own boards
+        if (req.user.role === 'user') {
+            const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+            if (!boardsIds.includes(boardId)) throw new AppError('Forbidden', 403)
+        }
+
+        //Get all lists of the board
+        const lists = await ListServices.getAllListsOfBoard(boardId)
+        return successResponse(res, lists)
     }
 }
