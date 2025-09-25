@@ -140,7 +140,7 @@ export class ListController{
             //Delete list
             await ListServices.deleteList(id)
             return successResponse(res, {message: "List deleted successfully"})
-        }
+        }        
                         
         //Get all boards of current user
         static async getUserBoardsIds(userId) {
