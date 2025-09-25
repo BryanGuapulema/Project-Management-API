@@ -20,4 +20,8 @@ export class TaskServices{
     static async updateTask(id, data){
         return await Task.findByIdAndUpdate(id,data,{new: true})
     }
+
+    static async deleteTask(id){
+        return await Task.findByIdAndDelete(id)
+    }
 }

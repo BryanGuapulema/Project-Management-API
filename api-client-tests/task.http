@@ -65,3 +65,14 @@ Content-Type: application/json
 {
     "title": "Task 1 List 1 Board 1 User 2"
 }
+
+
+
+
+
+###DELETE TASK IN CURRENT USER LIST
+DELETE http://localhost:4000/tasks/68d59cd6f0ea5ea5c07a4ba9
+
+
+###DELETE TASK IN ANOTHER USER LIST
+DELETE http://localhost:4000/tasks/68d5bb122d9fad87a644c705

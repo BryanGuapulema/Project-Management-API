@@ -146,4 +146,30 @@ export class TaskController{
         const updatedTask = await TaskServices.updateTask(id,{ ...result.data,assignedTo})
         return successResponse(res, updatedTask)                
     }
+
+    static async deleteTask(req,res){
+        //validate task id is valid
+        const {id} = req.params
+        if(!isValidObjectId(id)) throw new AppError('Invalid task id',400)
+
+        ////look for task
+        const task = await TaskServices.getTaskById(id)
+        if(!task) throw new AppError('Task not found',404)
+
+
+            
+        ////Validate user role: User can only delete tasks in own lists
+        const list = await ListServices.getListById(task.listId)
+        if(req.user.role === 'user'){
+            //Get all boards of current user
+            const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+            //validates if is user list
+            if(!boardsIds.includes(list.boardId.toString())) throw new AppError('Forbidden',403)
+        }
+
+        //delete task
+        await TaskServices.deleteTask(id)
+        return successResponse(res, {message: "Task deleted successfully"})
+        
+    }
 }
