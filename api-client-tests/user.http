@@ -50,3 +50,12 @@ GET http://localhost:4000/users/68d2d8c25a7e899b25e6eab1/lists
 
 ###GET USER LISTS(ANOTHER USER)
 GET http://localhost:4000/users/68d2d833977f17d02f965312/lists
+
+
+
+###GET USER TASKS(CURRENT USER)
+GET http://localhost:4000/users/68d2d8c25a7e899b25e6eab1/tasks
+
+
+###GET USER TASKS(ANOTHER USER)
+GET http://localhost:4000/users/68d2d833977f17d02f965312/tasks
