@@ -58,3 +58,9 @@ Content-Type: application/json
 {
     "position": 2
 }
+
+###GET ALL TASKS FROM A LIST (DEPENDS ON ROLE)
+GET http://localhost:4000/lists/68d4939e65ffa39ef04f5fac/tasks
+
+###GET ALL TASKS FROM A LIST (DEPENDS ON ROLE)
+GET http://localhost:4000/lists/68d4949965ffa39ef04f5fbe/tasks

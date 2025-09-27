@@ -5,6 +5,7 @@ import { AppError } from "../utils/appError.js"
 import { successResponse } from "../utils/response.js"
 import {validatePartialSchema, validateSchema} from "../utils/validateSchema.js"
 import { ListSchema } from "../validations/listSchema.js"
+import { TaskServices } from "../services/TaskServices.js"
 
 
 export class ListController{
@@ -142,6 +143,34 @@ export class ListController{
             return successResponse(res, {message: "List deleted successfully"})
         }        
                         
+        
+        
+        //Get all tasks from a list
+        static async getTasksByListId(req,res){
+            //validate list id is valid
+            const {id} = req.params
+            if(!isValidObjectId(id)) throw new AppError('Invalid list id',400)
+            
+            //look for list
+            const list = await ListServices.getListById(id)
+            if(!list) throw new AppError('List not found',404)
+
+            //Validate user role: User can only get tasks if list is in own boards
+            if(req.user.role === 'user'){
+                //Get all boards of current user
+                const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+                //validates it is user board 
+                if(!boardsIds.includes(list.boardId.toString())) throw new AppError('Forbidden',403)
+            }
+
+            //return tasks from list
+            const tasks = await TaskServices.getAllTasksofList(list._id)
+            return successResponse(res,tasks)
+        }
+
+        
+
+
         //Get all boards of current user
         static async getUserBoardsIds(userId) {
             const boards = await BoardServices.getAllUserBoards(userId)   
