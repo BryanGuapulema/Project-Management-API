@@ -1,4 +1,5 @@
 import { UserServices } from '../services/UserServices.js'
+import { BoardServices } from '../services/BoardServices.js'
 import {AppError} from '../utils/appError.js'
 import { validatePartialSchema, validateSchema } from '../utils/validateSchema.js'
 import { userSchema } from '../validations/userSchema.js'
@@ -81,5 +82,22 @@ export class UserController{
         const userDeleted = await UserServices.deleteUser(id)
         if (!userDeleted) throw new AppError('User not found', 404)
         successResponse(res,userDeleted)
+    }
+
+    static async getUserBoards(req,res){
+        //validate user id
+        const {id} = req.params
+        if(!isValidObjectId(id)) throw new AppError('Invalid user id',400)
+            
+        //check for role. If user check for id authorized
+        if(req.user.role !== 'admin' && req.user.id !== id) throw new AppError('Forbidden',403)                            
+        
+        //validate user exists
+        const user = await UserServices.getUserById(id)
+        if (!user) throw new AppError('User not found', 404)
+
+        //Validate user role: User can only access lists from own boards        
+        const boards = await BoardServices.getAllUserBoards(id)
+        return successResponse(res,boards)
     }
 }
