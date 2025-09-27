@@ -31,10 +31,26 @@ API para gestión de proyectos, tableros, listas y tareas, construida con **Node
 
 ### Users 
 - `GET /api/users` → Lista todos los usuarios (**solo admin**).
-- `GET /api/users/:id` → Obtiene un usuario (admin puede ver cualquiera, user solo puede ver su propio perfil).
+- `GET /api/users/:id` → Obtiene un usuario.
+  - **admin** → puede ver cualquiera.
+  - **user** → solo puede ver su propio perfil.
 - `POST /api/users` → Crea un usuario (registro abierto).
-- `PUT /api/users/:id` → Actualiza un usuario (admin puede actualizar cualquiera, user solo su propio perfil).
-- `DELETE /api/users/:id` → Elimina un usuario (admin puede eliminar cualquiera, user solo su propio perfil).
+- `PUT /api/users/:id` → Actualiza un usuario.
+  - **admin** → puede actualizar cualquiera.
+  - **user** → solo puede puede actualizar su propio perfil.
+- `DELETE /api/users/:id` → Elimina un usuario
+  - **admin** → puede eliminar cualquiera.
+  - **user** → solo puede puede eliminar su propio perfil.
+- `GET /api/users/:id/boards` → Lista todos los tableros de un usuario
+  - **admin** → puede ver tableros de cualquier usuario.
+  - **user** → solo puede ver sus propios tableros.
+- `GET /api/users/:id/lists` → Lista todas las listas de un usuario
+  - **admin** → puede ver listas de cualquier usuario.
+  - **user** → solo puede ver sus propias listas.
+- `GET /api/users/:id/tasks` → Lista todas las tareas de un usuario
+  - **admin** → puede ver tareas de cualquier usuario.
+  - **user** → solo puede ver sus propias tareas.
+
 
 ---
 
@@ -45,6 +61,9 @@ API para gestión de proyectos, tableros, listas y tareas, construida con **Node
 - `GET /api/boards/:id` → Obtiene un board por ID  
   - **admin** → puede acceder a cualquier board.  
   - **user** → solo si es owner del board.
+- `GET /api/boards/:id/lists`→ Lista todas las listas de un board
+  - **admin** → devuelve todas las listas del board.
+  - **user** → solo devuelve las listas de boards que le pertenecen.
 - `POST /api/boards` → Crea un board (admin o user).
 - `PATCH /api/boards/:id` → Actualiza un board  
   - **admin** → puede actualizar cualquier board.  
@@ -62,6 +81,9 @@ API para gestión de proyectos, tableros, listas y tareas, construida con **Node
 - `GET /api/lists/:id` → Obtiene una lista por ID  
   - **admin** → puede ver cualquier lista.  
   - **user** → solo si pertenece a uno de sus boards.
+- `GET /api/lists/:id/tasks`→ Lista todas las tareas de una lista
+  - **admin** → devuelve todas las tareas de la lista.
+  - **user** → solo devuelve tareas de listas que pertenecen a sus boards.
 - `POST /api/lists` → Crea una lista  
   - **admin** → en cualquier board.  
   - **user** → solo en sus propios boards.
