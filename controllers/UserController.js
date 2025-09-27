@@ -5,6 +5,7 @@ import { userSchema } from '../validations/userSchema.js'
 import { successResponse } from '../utils/response.js'
 import bcrypt from 'bcrypt'
 import { SALT_ROUNDS } from '../config/config.js'
+import { isValidObjectId } from 'mongoose'
 
 export class UserController{
     static async getAllUsers(req,res){
@@ -15,9 +16,14 @@ export class UserController{
 
     static async getUserById(req,res){
         const {id} = req.params
+
+        if(!isValidObjectId(id)) throw new AppError('Invalid user id',400)
         const user = await UserServices.getUserById(id)
-        if (!user) throw new AppError('User not found', 404)
-        successResponse(res,user)
+        if (!user) throw new AppError('User not found', 404y)
+        
+        if(req.user.role !== 'admin' && req.user.id !== id) throw new AppError('Forbidden',403)                            
+
+        return successResponse(res,user)
     }
 
     static async createUser(req,res){
@@ -32,6 +38,7 @@ export class UserController{
         const newUser = await UserServices.createUser({...result.data, password: passwordHashed})
         successResponse(res,newUser,201)
     }
+    
     static async updateUser(req,res){
         const result = validatePartialSchema(userSchema, req.body)
         if(!result.success) {
