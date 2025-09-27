@@ -139,6 +139,5 @@ export class AuthController{
       static async me (req, res) {
         const user = req.user
         if (user) return successResponse(res,user)
-        throw new AppError('Not logged yet',400)
       }
 }

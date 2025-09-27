@@ -29,7 +29,7 @@ API para gestión de proyectos, tableros, listas y tareas, construida con **Node
 - `POST /api/auth/logout` → Cierra la sesión eliminando el `refreshToken` (requiere autenticación).
 
 
-### Users 🟡
+### Users 
 - `GET /api/users` → Lista todos los usuarios (**solo admin**).
 - `GET /api/users/:id` → Obtiene un usuario (admin puede ver cualquiera, user solo puede ver su propio perfil).
 - `POST /api/users` → Crea un usuario (registro abierto).
