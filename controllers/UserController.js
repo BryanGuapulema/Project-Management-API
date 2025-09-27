@@ -8,6 +8,7 @@ import { SALT_ROUNDS } from '../config/config.js'
 
 export class UserController{
     static async getAllUsers(req,res){
+        if(req.user.role !== 'admin') throw new AppError('Forbidden',403)
         const users  = await UserServices.getAllUsers()
         successResponse(res,users)
     }
