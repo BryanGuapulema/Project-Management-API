@@ -7,6 +7,8 @@ import { successResponse } from '../utils/response.js'
 import bcrypt from 'bcrypt'
 import { SALT_ROUNDS } from '../config/config.js'
 import { isValidObjectId } from 'mongoose'
+import { ListServices } from '../services/ListServices.js'
+import { ListController } from './ListController.js'
 
 export class UserController{
     static async getAllUsers(req,res){
@@ -96,8 +98,55 @@ export class UserController{
         const user = await UserServices.getUserById(id)
         if (!user) throw new AppError('User not found', 404)
 
-        //Validate user role: User can only access lists from own boards        
+        //Validate user role: User can only access own boards        
         const boards = await BoardServices.getAllUserBoards(id)
         return successResponse(res,boards)
     }
+
+    static async getUserLists(req,res){
+        //validate user id
+        const {id} = req.params
+        if(!isValidObjectId(id)) throw new AppError('Invalid user id',400)
+            
+        //check for role. If user check for id authorized
+        if(req.user.role !== 'admin' && req.user.id !== id) throw new AppError('Forbidden',403)                            
+        
+        //validate user exists
+        const user = await UserServices.getUserById(id)
+        if (!user) throw new AppError('User not found', 404)
+
+        //Get all boards of current user
+        const boardsIds = await ListController.getUserBoardsIds(id)
+        
+        // Get all board lists and flatten them
+        const listsArrays = await Promise.all(
+            boardsIds.map(boardId => ListServices.getAllListsOfBoard(boardId))
+        )
+        
+        const lists = listsArrays.flat()
+
+        return successResponse(res,lists)
+    }
+
+    static async getUserTasks(req,res){
+        //Get all boards of current user
+                    const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+                    
+                    // Get all board lists ids and flatten them
+                    const listsArrays = await Promise.all(
+                        boardsIds.map(boardId => ListServices.getAllListsOfBoard(boardId))
+                    )
+                    
+                    const listIds = listsArrays.flat().map(list => list._id)
+                    
+                    // Get all list tasks and flatten them
+                    const tasksArrays = await Promise.all(
+                        listIds.map(listId => TaskServices.getAllTasksofList(listId))
+                    )
+                    
+                    tasks = tasksArrays.flat()
+    }
+
+
+
 }
