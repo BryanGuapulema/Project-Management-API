@@ -19,7 +19,7 @@ export class UserController{
 
         if(!isValidObjectId(id)) throw new AppError('Invalid user id',400)
         const user = await UserServices.getUserById(id)
-        if (!user) throw new AppError('User not found', 404y)
+        if (!user) throw new AppError('User not found', 404)
         
         if(req.user.role !== 'admin' && req.user.id !== id) throw new AppError('Forbidden',403)                            
 
@@ -40,14 +40,25 @@ export class UserController{
     }
     
     static async updateUser(req,res){
+        //validate user id
+        const {id} = req.params
+        if(!isValidObjectId(id)) throw new AppError('Invalid user id',400)
+
+        //validate user exists
+        const user = await UserServices.getUserById(id)
+        if (!user) throw new AppError('User not found', 404)
+        
+        //check for role. If user check for id authorized
+        if(req.user.role !== 'admin' && req.user.id !== id) throw new AppError('Forbidden',403)     
+        
+        //validate req body
         const result = validatePartialSchema(userSchema, req.body)
         if(!result.success) {
             throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message),400)
         }
 
-        const {id} = req.params
-        const userUpdated = await UserServices.updateUser(id, result.data)
-        if (!userUpdated) throw new AppError('User not found', 404)
+        //update user
+        const userUpdated = await UserServices.updateUser(id, result.data)        
         successResponse(res,userUpdated) 
     }
     static async deleteUser(req,res ){
