@@ -1,8 +1,7 @@
 import { connect } from 'mongoose'
 import { MONGO_URI } from './config.js'
 
-
-export const connectDatabase = async ()=>{
+export const connectDatabase = async () => {
   try {
     await connect(MONGO_URI)
     console.log('✅ Database connection successful')
