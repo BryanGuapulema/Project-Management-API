@@ -6,6 +6,6 @@ export const successResponse = (res, data, statusCode = 200, options = {}) => {
 
   res.status(statusCode).json({
     success: true,
-    data,
+    data
   })
 }
