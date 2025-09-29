@@ -1,44 +1,42 @@
-import {Schema, model} from 'mongoose'
+import { Schema, model } from 'mongoose'
 
 const TaskSchema = new Schema(
   {
     title: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     description: {
       type: String,
-      default: "",
-      trim: true,
+      default: '',
+      trim: true
     },
     status: {
       type: String,
-      enum: ["todo", "in-progress", "done"],
-      default: "todo",
+      enum: ['todo', 'in-progress', 'done'],
+      default: 'todo'
     },
     priority: {
       type: String,
-      enum: ["low", "medium", "high"],
-      default: "medium",
+      enum: ['low', 'medium', 'high'],
+      default: 'medium'
     },
     dueDate: {
-      type: Date,
+      type: Date
     },
     listId: {
       type: Schema.Types.ObjectId,
-      ref: "List",
-      required: true,
+      ref: 'List',
+      required: true
     },
     assignedTo: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User'
     }
   },
-  { 
+  {
     timestamps: true
-})
+  })
 
-export const Task = model("Task", TaskSchema);
-
-
+export const Task = model('Task', TaskSchema)
