@@ -1,33 +1,33 @@
-import { Board } from "../models/BoardModel.js";
+import { Board } from '../models/BoardModel.js'
 
 export class BoardServices {
-    //Get all boards of a user
-    static async getAllUserBoards(ownerId){
-        return await Board.find({ownerId}).sort({ createdAt: -1 })
-    }
-    
-    //get all Boards
-    static async getAllBoards(){
-        return await Board.find().sort({ createdAt: -1 })
-    }
+  // Get all boards of a user
+  static async getAllUserBoards (ownerId) {
+    return await Board.find({ ownerId }).sort({ createdAt: -1 })
+  }
 
-    //create a board by logged user
-    static async createBoard(data){        
-        return await Board.create(data)
-    }
+  // get all Boards
+  static async getAllBoards () {
+    return await Board.find().sort({ createdAt: -1 })
+  }
 
-    //get board by id
-    static async getBoardById(id){
-        return await Board.findById(id)
-    }
+  // create a board by logged user
+  static async createBoard (data) {
+    return await Board.create(data)
+  }
 
-    //update board
-    static async updateBoard(id,data){
-        return await Board.findByIdAndUpdate(id, data, {new: true})
-    }
+  // get board by id
+  static async getBoardById (id) {
+    return await Board.findById(id)
+  }
 
-    //delete board
-    static async deleteBoard(id){
-        return await Board.findByIdAndDelete(id)
-    }
+  // update board
+  static async updateBoard (id, data) {
+    return await Board.findByIdAndUpdate(id, data, { new: true })
+  }
+
+  // delete board
+  static async deleteBoard (id) {
+    return await Board.findByIdAndDelete(id)
+  }
 }
