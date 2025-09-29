@@ -1,131 +1,127 @@
-import { isValidObjectId} from "mongoose"
-import { BoardServices } from "../services/BoardServices.js"
-import { AppError } from "../utils/appError.js"
-import { successResponse } from "../utils/response.js"
+import { isValidObjectId } from 'mongoose'
+import { BoardServices } from '../services/BoardServices.js'
+import { AppError } from '../utils/appError.js'
+import { successResponse } from '../utils/response.js'
 import { validatePartialSchema, validateSchema } from '../utils/validateSchema.js'
-import { boardSchema } from "../validations/boardSchema.js"
-import { ListController } from "./ListController.js"
-import { ListServices } from "../services/ListServices.js"
+import { boardSchema } from '../validations/boardSchema.js'
+import { ListController } from './ListController.js'
+import { ListServices } from '../services/ListServices.js'
 
+export class BoardController {
+  static async getAllBoards (req, res) {
+    const { status } = req.query
+    let boards = null
 
-export class BoardController{
-    static async getAllBoards(req,res){
-        const {status} = req.query        
-        let boards = null
-
-        if (req.user.role === 'user'){
-            //Get all boards of current user
-            boards= await BoardServices.getAllUserBoards(req.user.id)             
-        }else{
-            //Get all boards
-            boards= await BoardServices.getAllBoards()
-        }
-        
-        //filter by status
-        if (status){
-            const result = validatePartialSchema(boardSchema,{status})
-            if(!result.success) throw new AppError('status not valid',400)
-            boards = boards.filter(board => board.status === status)
-        }
-
-        return successResponse(res, boards)
-    } 
-
-    //create a board by logged user
-    static async createBoard(req,res){
-        const result = validateSchema(boardSchema,req.body)
-        
-        if(!result.success) {
-            throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message),400)
-        }        
-        
-        const data = {
-            ...result.data,
-            ownerId: req.user.id
-        }
-        const newBoard= await BoardServices.createBoard(data)
-        return successResponse(res, newBoard,201)
-    } 
-
-    //get board by id
-    static async getBoardById(req,res){
-        const {id} = req.params                
-        if(!isValidObjectId(id)) throw new AppError('Invalid board id format',400)
-            
-        const board = await BoardServices.getBoardById(id)
-        if (!board) throw new AppError('Board not found', 404)
-
-        if(req.user.role === 'user'){
-            if(board.ownerId.toString() !== req.user.id) {
-                throw new AppError('Forbidden',403)
-            }
-        }
-
-
-        return successResponse(res,board)
+    if (req.user.role === 'user') {
+      // Get all boards of current user
+      boards = await BoardServices.getAllUserBoards(req.user.id)
+    } else {
+      // Get all boards
+      boards = await BoardServices.getAllBoards()
     }
 
-    //update board
-    static async updateBoard(req,res){
-        const {id} = req.params                
-        if(!isValidObjectId(id)) throw new AppError('Invalid board id format',400)
-
-        const result = validatePartialSchema(boardSchema,req.body)
-        
-        if(!result.success) {
-            throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message),400)
-        }    
-        
-        const board = await BoardServices.getBoardById(id)
-        if (!board) throw new AppError('Board not found', 404)
-
-
-        if(req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id ){            
-            throw new AppError('Forbidden',403)            
-        }
-                
-        const boardUpdated= await BoardServices.updateBoard(id,result.data)
-
-        return successResponse(res, boardUpdated)
-        
+    // filter by status
+    if (status) {
+      const result = validatePartialSchema(boardSchema, { status })
+      if (!result.success) throw new AppError('status not valid', 400)
+      boards = boards.filter(board => board.status === status)
     }
 
-    //delete board
-    static async deleteBoard(req, res){
-        const {id} = req.params                
-        if(!isValidObjectId(id)) throw new AppError('Invalid board id format',400)
-        
-        const board = await BoardServices.getBoardById(id)
-        if (!board) throw new AppError('Board not found', 404)
-        
-        if(req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id ){            
-            throw new AppError('Forbidden',403)            
-        }
+    return successResponse(res, boards)
+  }
 
-        await BoardServices.deleteBoard(id)
+  // create a board by logged user
+  static async createBoard (req, res) {
+    const result = validateSchema(boardSchema, req.body)
 
-        return successResponse(res, {message: "Board deleted successfully"})
+    if (!result.success) {
+      throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message), 400)
     }
 
-    //get all list related to a board
-    static async getListsByBoardId(req, res) {
-        const { id: boardId } = req.params
-
-        //validate board id is valid
-        if (!isValidObjectId(boardId)) throw new AppError('Invalid board id', 400)
-
-        //validate board exists
-        const board = await BoardServices.getBoardById(boardId)
-        if (!board) throw new AppError('Board not found', 404)
-
-        //Validate user role: User can only access lists from own boards
-        if (req.user.role === 'user') {
-            const boardsIds = await ListController.getUserBoardsIds(req.user.id)
-            if (!boardsIds.includes(boardId)) throw new AppError('Forbidden', 403)
-        }
-
-        //Get all lists of the board
-        const lists = await ListServices.getAllListsOfBoard(boardId)
-        return successResponse(res, lists)
+    const data = {
+      ...result.data,
+      ownerId: req.user.id
     }
+    const newBoard = await BoardServices.createBoard(data)
+    return successResponse(res, newBoard, 201)
+  }
+
+  // get board by id
+  static async getBoardById (req, res) {
+    const { id } = req.params
+    if (!isValidObjectId(id)) throw new AppError('Invalid board id format', 400)
+
+    const board = await BoardServices.getBoardById(id)
+    if (!board) throw new AppError('Board not found', 404)
+
+    if (req.user.role === 'user') {
+      if (board.ownerId.toString() !== req.user.id) {
+        throw new AppError('Forbidden', 403)
+      }
+    }
+
+    return successResponse(res, board)
+  }
+
+  // update board
+  static async updateBoard (req, res) {
+    const { id } = req.params
+    if (!isValidObjectId(id)) throw new AppError('Invalid board id format', 400)
+
+    const result = validatePartialSchema(boardSchema, req.body)
+
+    if (!result.success) {
+      throw new AppError(JSON.parse(result.error).map(error => error.path + ': ' + error.message), 400)
+    }
+
+    const board = await BoardServices.getBoardById(id)
+    if (!board) throw new AppError('Board not found', 404)
+
+    if (req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id) {
+      throw new AppError('Forbidden', 403)
+    }
+
+    const boardUpdated = await BoardServices.updateBoard(id, result.data)
+
+    return successResponse(res, boardUpdated)
+  }
+
+  // delete board
+  static async deleteBoard (req, res) {
+    const { id } = req.params
+    if (!isValidObjectId(id)) throw new AppError('Invalid board id format', 400)
+
+    const board = await BoardServices.getBoardById(id)
+    if (!board) throw new AppError('Board not found', 404)
+
+    if (req.user.role !== 'admin' && board.ownerId.toString() !== req.user.id) {
+      throw new AppError('Forbidden', 403)
+    }
+
+    await BoardServices.deleteBoard(id)
+
+    return successResponse(res, { message: 'Board deleted successfully' })
+  }
+
+  // get all list related to a board
+  static async getListsByBoardId (req, res) {
+    const { id: boardId } = req.params
+
+    // validate board id is valid
+    if (!isValidObjectId(boardId)) throw new AppError('Invalid board id', 400)
+
+    // validate board exists
+    const board = await BoardServices.getBoardById(boardId)
+    if (!board) throw new AppError('Board not found', 404)
+
+    // Validate user role: User can only access lists from own boards
+    if (req.user.role === 'user') {
+      const boardsIds = await ListController.getUserBoardsIds(req.user.id)
+      if (!boardsIds.includes(boardId)) throw new AppError('Forbidden', 403)
+    }
+
+    // Get all lists of the board
+    const lists = await ListServices.getAllListsOfBoard(boardId)
+    return successResponse(res, lists)
+  }
 }
