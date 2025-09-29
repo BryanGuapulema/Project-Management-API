@@ -15,19 +15,17 @@ export const app = express()
 
 app.disable('x-powered-by')
 app.use(corsMiddleware())
-app.use(cookieParser());
+app.use(cookieParser())
 app.use(express.json())
-app.use('/',authRouter)
-
+app.use('/', authRouter)
 app.use(authMiddleware)
-app.get('/auth/me',catchAsync(AuthController.me))
+app.get('/auth/me', catchAsync(AuthController.me))
 
+// routes
+app.use('/users', userRouter)
+app.use('/boards', BoardRouter)
+app.use('/lists', ListRouter)
+app.use('/tasks', TaskRouter)
 
-//routes
-app.use('/users',userRouter)
-app.use('/boards',BoardRouter)
-app.use('/lists',ListRouter)
-app.use('/tasks',TaskRouter)
-
-//ErrorHandler
+// ErrorHandler
 app.use(errorHandler)
